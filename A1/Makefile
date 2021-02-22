@@ -17,16 +17,6 @@ compile:
 	@g++ montecarlo_parallel.cpp -O3 -fopenmp -o montecarlo_parallel
 	@echo
 
-# test:
-# 	@echo "Testing Trapezoid Serial";
-# 	@time -f "\t%Es real,\t%Us user,\t%Ss sys" ./trapezoid_serial
-# 	@echo "\n\nTesting Trapezoid Parallel";
-# 	@time -f "\t%Es real,\t%Us user,\t%Ss sys" ./trapezoid_parallel
-# 	@echo "\n\nTesting Monte Carlo Serial";
-# 	@time -f "\t%Es real,\t%Us user,\t%Ss sys" ./montecarlo_serial
-# 	@echo "\n\nTesting Monte Carlo Parallel";
-# 	@time -f "\t%Es real,\t%Us user,\t%Ss sys" ./montecarlo_parallel
-# 	@echo
 
 test:
 	@echo "Testing Trapezoid Serial";
