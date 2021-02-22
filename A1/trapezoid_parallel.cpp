@@ -22,10 +22,9 @@ int main() {
         I *= del_x;
         auto stop = high_resolution_clock::now();
         time_taken = duration_cast<milliseconds>(stop - start).count();
-        cout << "\nThreads = " << threads << endl;
-        cout << "\tDivisions = " << N << endl;
-        cout << "\tIntegral with Trapezoidal Rule = " << I << endl << endl;
-        cout << "\tTime Elapsed = " << time_taken << " ms\n" << endl;
+        cout << "\nThreads = " << threads << "\n\n\tDivisions = " << N
+             << "\n\tIntegral = " << I << "\n\tTime Elapsed = " << time_taken
+             << " ms\n\n";
     }
     return 0;
 }
