@@ -21,11 +21,11 @@ compile:
 test:
 	@echo "Testing Trapezoid Serial";
 	@./trapezoid_serial
-	@echo "\n\nTesting Trapezoid Parallel";
+	@echo "\nTesting Trapezoid Parallel";
 	@./trapezoid_parallel
-	@echo "\n\nTesting Monte Carlo Serial";
+	@echo "\nTesting Monte Carlo Serial";
 	@./montecarlo_serial
-	@echo "\n\nTesting Monte Carlo Parallel";
+	@echo "\nTesting Monte Carlo Parallel";
 	@./montecarlo_parallel
 	@echo
 

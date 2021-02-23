@@ -24,7 +24,6 @@ This repository contains coding assignments of the **ME766**: High Performance S
             Time Elapsed = 897 ms
 
 
-
     Testing Trapezoid Parallel
 
     Threads = 2
@@ -55,13 +54,11 @@ This repository contains coding assignments of the **ME766**: High Performance S
             Time Elapsed = 254 ms
 
 
-
     Testing Monte Carlo Serial
 
             Samples = 100000000
             Integral = 2.00005
             Time Elapsed = 3411 ms
-
 
 
     Testing Monte Carlo Parallel
