@@ -10,12 +10,13 @@
 #define vvf vector<vector<float>>
 
 using namespace std;
+
 void print(vvf &M) {
     cout << endl;
     cout.setf(ios::fixed);
-    for (auto row : M) {
+    for (vf row : M) {
         cout << '\t';
-        for (auto i : row) cout << setprecision(3) << i << " ";
+        for (float i : row) cout << setw(10) << setprecision(2) << i << " ";
         cout << endl;
     }
     cout << endl;
@@ -24,7 +25,7 @@ void print(vvf &M) {
 
 float randomFloat() {
     static mt19937 generator(42);
-    static uniform_real_distribution<double> dist(0, 1);
+    static uniform_real_distribution<double> dist(-2, 2);
     return dist(generator);
 }
 
@@ -57,12 +58,10 @@ int main() {
 
     cout << "Initializing Random Matrices" << endl;
     vvf A(N, vf(N, 0)), B(N, vf(N, 0));
-    for (int i = 0; i < N; i++) {
-        generate(A[i].begin(), A[i].end(), randomFloat);
-        generate(B[i].begin(), B[i].end(), randomFloat);
-    }
+    for (vf &row : A) generate(row.begin(), row.end(), randomFloat);
+    for (vf &row : B) generate(row.begin(), row.end(), randomFloat);
 
-    cout << "Multiplying" << endl;
+    cout << "Multiplying Matrices" << endl;
     vvf C = multiply(A, B);
     // print(C);
 
