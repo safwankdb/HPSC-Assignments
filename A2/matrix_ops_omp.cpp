@@ -56,7 +56,10 @@ vvf gaussianElimination(vvf &A) {
 }
 
 int main() {
-    const int N = 10000;
+    
+    cout << "Max threads: " <<  omp_get_max_threads() << endl;
+
+    const int N = 1000;
     cout << "Initializing Random Matrices" << endl;
     vvf A(N, vf(N, 0)), B(N, vf(N, 0));
     for (vf &row : A) generate(row.begin(), row.end(), randomFloat);
