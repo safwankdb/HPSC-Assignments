@@ -2,11 +2,22 @@
 
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
+#include <iostream>
+#include <random>
 #include <vector>
 
-#include "utils.h"
-
 #define N 1000
+
+using namespace std;
+
+void print(float M[N][N]);
+
+float randomFloat() {
+    static mt19937 generator(42);
+    static uniform_real_distribution<double> dist(-2, 2);
+    return dist(generator);
+}
 
 void multiply(float A[N][N], float B[N][N], float C[N][N]) {
     int i, j, k;
@@ -33,7 +44,6 @@ int main() {
     cout << "Initializing Random Matrices" << endl;
     static float A[N][N], B[N][N], C[N][N] = {0};
     int i, j;
-#pragma omp parallel for private(j)
     for (i = 0; i < N; i++)
         for (j = 0; j < N; j++) {
             A[i][j] = randomFloat();
@@ -56,7 +66,19 @@ int main() {
     cout << "Transforming into Upper Triangluar" << endl;
     gaussianElimination(C);
     stop = chrono::high_resolution_clock::now();
-    timer = chrono::duration_cast<chrono::milliseconds>(stop -
-    start).count(); cout << "\n\tTime Elapsed = " << timer << " ms\n\n";
+    timer = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
+    cout << "\n\tTime Elapsed = " << timer << " ms\n\n";
     // print(C);
+}
+
+void print(float M[N][N]) {
+    cout << endl;
+    cout.setf(ios::fixed);
+    for (int i = 0; i < N; i++) {
+        cout << '\t';
+        for (int j = 0; j < N; j++)
+            cout << setw(10) << setprecision(2) << M[i][j] << " ";
+        cout << endl;
+    }
+    cout << endl;
 }
