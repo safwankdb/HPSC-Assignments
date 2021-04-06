@@ -1,7 +1,7 @@
-all: matrix_ops_omp matrix_ops_mpi
+all: omp mpi
 
-matrix_ops_omp:
-	g++ -O3 -fopenmp matrix_ops_omp.cpp -o omp && ./omp
+omp:
+	g++ -O3 -fopenmp matrix_ops_omp.cpp -o omp_out && ./omp_out
 
-matrix_ops_mpi:
-
+mpi:
+	@echo "Not Implemented"

@@ -58,12 +58,16 @@ vvf gaussianElimination(vvf &A) {
 }
 
 int main() {
-    
     cout << "Max threads: " <<  omp_get_max_threads() << endl;
     cout << "Initializing Random Matrices" << endl;
     vvf A(N, vf(N, 0)), B(N, vf(N, 0));
-    for (vf &row : A) generate(row.begin(), row.end(), randomFloat);
-    for (vf &row : B) generate(row.begin(), row.end(), randomFloat);
+    int i, j;
+#pragma omp parallel for private(j)
+    for (i = 0; i < N; i++)
+	for (j = 0; j < N; j++){
+	    A[i][j] = randomFloat();
+	    B[i][j] = randomFloat();
+	}	    
     // print(A);
     // print(B);
     int time_taken;
