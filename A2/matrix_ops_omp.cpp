@@ -10,6 +10,8 @@
 #define vf vector<float>
 #define vvf vector<vector<float>>
 
+#define N 1000
+
 using namespace std;
 using namespace std::chrono;
 
@@ -32,7 +34,7 @@ float randomFloat() {
 }
 
 vvf multiply(vvf &A, vvf &B) {
-    int i, j, k, N = A.size();
+    int i, j, k;
     vvf C(N, vf(N, 0));
 #pragma omp parallel for private(j, k)
     for (i = 0; i < N; i++)
@@ -58,8 +60,6 @@ vvf gaussianElimination(vvf &A) {
 int main() {
     
     cout << "Max threads: " <<  omp_get_max_threads() << endl;
-
-    const int N = 1000;
     cout << "Initializing Random Matrices" << endl;
     vvf A(N, vf(N, 0)), B(N, vf(N, 0));
     for (vf &row : A) generate(row.begin(), row.end(), randomFloat);
