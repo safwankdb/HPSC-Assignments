@@ -2,36 +2,11 @@
 
 #include <algorithm>
 #include <chrono>
-#include <iomanip>
-#include <iostream>
-#include <random>
 #include <vector>
 
-#define vf vector<float>
-#define vvf vector<vector<float>>
+#include "utils.h"
 
 #define N 1000
-
-using namespace std;
-using namespace std::chrono;
-
-void print(vvf &M) {
-    cout << endl;
-    cout.setf(ios::fixed);
-    for (vf row : M) {
-        cout << '\t';
-        for (float i : row) cout << setw(10) << setprecision(2) << i << " ";
-        cout << endl;
-    }
-    cout << endl;
-    return;
-}
-
-float randomFloat() {
-    static mt19937 generator(42);
-    static uniform_real_distribution<double> dist(-2, 2);
-    return dist(generator);
-}
 
 vvf multiply(vvf &A, vvf &B) {
     int i, j, k;
@@ -58,34 +33,34 @@ vvf gaussianElimination(vvf &A) {
 }
 
 int main() {
-    cout << "Max threads: " <<  omp_get_max_threads() << endl;
+    cout << "Max threads: " << omp_get_max_threads() << endl;
     cout << "Initializing Random Matrices" << endl;
     vvf A(N, vf(N, 0)), B(N, vf(N, 0));
     int i, j;
 #pragma omp parallel for private(j)
     for (i = 0; i < N; i++)
-	for (j = 0; j < N; j++){
-	    A[i][j] = randomFloat();
-	    B[i][j] = randomFloat();
-	}	    
+        for (j = 0; j < N; j++) {
+            A[i][j] = randomFloat();
+            B[i][j] = randomFloat();
+        }
     // print(A);
     // print(B);
-    int time_taken;
-    std::chrono::_V2::system_clock::time_point start_time, stop_time;
+    int timer;
+    std::chrono::_V2::system_clock::time_point start, stop;
 
-    start_time = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
     cout << "Multiplying Matrices" << endl;
     vvf C = multiply(A, B);
-    stop_time = high_resolution_clock::now();
-    time_taken = duration_cast<milliseconds>(stop_time - start_time).count();
-    cout << "\n\tTime Elapsed = " << time_taken << " ms\n\n";
+    stop = chrono::high_resolution_clock::now();
+    timer = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
+    cout << "\n\tTime Elapsed = " << timer << " ms\n\n";
     // print(C);
 
-    start_time = high_resolution_clock::now();
+    start = chrono::high_resolution_clock::now();
     cout << "Transforming into Upper Triangluar" << endl;
     vvf U = gaussianElimination(C);
-    stop_time = high_resolution_clock::now();
-    time_taken = duration_cast<milliseconds>(stop_time - start_time).count();
-    cout << "\n\tTime Elapsed = " << time_taken << " ms\n\n";
+    stop = chrono::high_resolution_clock::now();
+    timer = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
+    cout << "\n\tTime Elapsed = " << timer << " ms\n\n";
     // print(U);
 }
