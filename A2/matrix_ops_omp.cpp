@@ -40,7 +40,7 @@ void gaussianElimination(float R[N][N]) {
 }
 
 int main() {
-    cout << "Max threads: " << omp_get_max_threads() << endl;
+    cout << "\nMax threads: " << omp_get_max_threads() << endl;
     cout << "Initializing Random Matrices" << endl;
     static float A[N][N], B[N][N], C[N][N] = {0};
     int i, j;
