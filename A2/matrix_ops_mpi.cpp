@@ -130,7 +130,8 @@ int main(int argc, char **argv) {
                 rows = numRows[p];
                 toCollect = rowsToCollect[p];
                 MPI_Send(&toCollect, 1, MPI_INT, p, DOWN, MPI_COMM_WORLD);
-                MPI_Send(&C[i][0], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
+                if (toCollect > 0)
+                    MPI_Send(&C[i][0], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
             }
 
             for (j = i + 1; j < numRows[0]; j++) {
@@ -159,7 +160,9 @@ int main(int argc, char **argv) {
         } else {
             MPI_Recv(&toCollect, 1, MPI_INT, MASTER, DOWN, MPI_COMM_WORLD,
                      &status);
-            MPI_Recv(&R, N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD, &status);
+            if (toCollect > 0)
+                MPI_Recv(&R, N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD,
+                         &status);
             for (j = rows - toCollect; j < rows; j++) {
                 r = C[j][i] / R[i];
                 for (k = i; k < N; k++) C[j][k] -= r * R[k];
