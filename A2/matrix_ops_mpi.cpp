@@ -1,7 +1,14 @@
-#define N 1000
 #define MASTER 0
-#define UP 8055
-#define DOWN 5088 /* slave-slave connection is not required */
+#define UP 420
+#define DOWN 666
+
+#ifndef N
+#define N 1000
+#endif
+
+#ifndef TEST
+#define TEST 0
+#endif
 
 #include <mpi.h>
 
@@ -20,7 +27,7 @@ float randomFloat() {
 }
 
 int main(int argc, char **argv) {
-    double start, end;
+    float start, end, timer1, timer2;
     int i, j, k;
     int numProcs;
     int myProc;
@@ -33,16 +40,13 @@ int main(int argc, char **argv) {
 
     start = MPI_Wtime();
 
-    static float A[N][N], B[N][N], C[N][N] = {{0}}; /* initialize to 0 */
+    static float A[N][N], B[N][N], C[N][N] = {{0}};
     if (myProc == MASTER) {
-        cout << "\nMax threads: " << numProcs << endl;
-        cout << "Initializing Random Matrices" << endl;
         for (i = 0; i < N; i++)
             for (j = 0; j < N; j++) {
                 A[i][j] = randomFloat();
                 B[i][j] = randomFloat();
             }
-        cout << "Multiplying Matrices" << endl;
         int p, block = N / numProcs;
         int numRows[numProcs] = {0};
         if (numProcs > N) {
@@ -53,7 +57,7 @@ int main(int argc, char **argv) {
             numRows[numProcs - 1] += N % numProcs;
         }
 
-        for (p = 1; p < numProcs; p++) { /* send rows to PEs*/
+        for (p = 1; p < numProcs; p++) {
             rows = numRows[p];
             MPI_Send(&rows, 1, MPI_INT, p, DOWN, MPI_COMM_WORLD);
             MPI_Send(&A[p * block][0], rows * N, MPI_FLOAT, p, DOWN,
@@ -65,14 +69,16 @@ int main(int argc, char **argv) {
             for (k = 0; k < N; k++)
                 for (j = 0; j < N; j++) C[i][j] = C[i][j] + A[i][k] * B[k][j];
 
-        for (p = 1; p < numProcs; p++) { /* receive rows from PEs*/
+        for (p = 1; p < numProcs; p++) {
             rows = numRows[p];
             MPI_Recv(&C[p * block][0], rows * N, MPI_FLOAT, p, UP,
                      MPI_COMM_WORLD, &status);
         }
         end = MPI_Wtime();
-        // print(C);
-        cout << "\n\tTime Elapsed = " << (end - start) * 1000 << " ms\n\n";
+#if TEST
+        print(C);
+#endif
+        timer1 = (end - start) * 1000;
     }
 
     else {
@@ -88,16 +94,15 @@ int main(int argc, char **argv) {
 
     start = MPI_Wtime();
     float r, R[N];
-
+    int M, p, block;
+    int numRows[numProcs];
     for (i = 0; i < N - 1; i++) {
         if (myProc == MASTER) {
-            if (i == 0) cout << "Transforming into Upper Triangluar" << endl;
-            int M = N - i - 1;
-            int p, block = M / numProcs;
-            int numRows[numProcs] = {0};
+            M = N - i - 1;
+            block = M / numProcs;
             if (numProcs > M) {
                 block = 1;
-                for (int l = 0; l < M; l++) numRows[l] = 1;
+                for (int l = 0; l < numProcs; l++) numRows[l] = l < M;
             } else {
                 for (int l = 0; l < numProcs; l++) numRows[l] = block;
                 numRows[numProcs - 1] += M % numProcs;
@@ -106,7 +111,8 @@ int main(int argc, char **argv) {
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
                 MPI_Send(&rows, 1, MPI_INT, p, DOWN, MPI_COMM_WORLD);
-                MPI_Send(&C[i][0], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
+                if (rows == 0) continue;
+                MPI_Send(&C[i], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
                 MPI_Send(&C[i + 1 + p * block][0], rows * N, MPI_FLOAT, p, DOWN,
                          MPI_COMM_WORLD);
             }
@@ -118,11 +124,14 @@ int main(int argc, char **argv) {
 
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
+                if (rows == 0) continue;
                 MPI_Recv(&C[i + 1 + p * block][0], rows * N, MPI_FLOAT, p, UP,
                          MPI_COMM_WORLD, &status);
             }
         } else {
             MPI_Recv(&rows, 1, MPI_INT, MASTER, DOWN, MPI_COMM_WORLD, &status);
+            if (rows == 0) break;
+
             MPI_Recv(&R, N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD, &status);
             MPI_Recv(&C, rows * N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD,
                      &status);
@@ -134,9 +143,12 @@ int main(int argc, char **argv) {
         }
     }
     if (myProc == MASTER) {
-        // print(C);
+#if TEST
+        print(C);
+#endif
         end = MPI_Wtime();
-        cout << "\n\tTime Elapsed = " << (end - start) * 1000 << " ms\n\n";
+        timer2 = (end - start) * 1000;
+        cout << timer1 << ", " << timer2 << endl;
     }
     MPI_Finalize();
     return 0;

@@ -1,13 +1,17 @@
 #include <omp.h>
 
-#include <algorithm>
 #include <chrono>
 #include <iomanip>
 #include <iostream>
 #include <random>
-#include <vector>
 
+#ifndef N
 #define N 1000
+#endif
+
+#ifndef TEST
+#define TEST 0
+#endif
 
 using namespace std;
 
@@ -40,8 +44,10 @@ void gaussianElimination(float R[N][N]) {
 }
 
 int main() {
-    cout << "\nMax threads: " << omp_get_max_threads() << endl;
-    cout << "Initializing Random Matrices" << endl;
+    typedef std::chrono::high_resolution_clock Time;
+    typedef std::chrono::milliseconds ms;
+    typedef std::chrono::duration<float> fsec;
+
     static float A[N][N], B[N][N], C[N][N] = {0};
     int i, j;
     for (i = 0; i < N; i++)
@@ -51,24 +57,21 @@ int main() {
         }
     // print(A);
     // print(B);
-    int timer;
-    std::chrono::_V2::system_clock::time_point start, stop;
-
-    start = chrono::high_resolution_clock::now();
-    cout << "Multiplying Matrices" << endl;
+    auto start = Time::now();
     multiply(A, B, C);
-    stop = chrono::high_resolution_clock::now();
-    timer = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
-    cout << "\n\tTime Elapsed = " << timer << " ms\n\n";
-    // print(C);
-
-    start = chrono::high_resolution_clock::now();
-    cout << "Transforming into Upper Triangluar" << endl;
+    auto stop = Time::now();
+    fsec timer1 = stop - start;
+#if TEST
+    print(C);
+#endif
+    start = Time::now();
     gaussianElimination(C);
-    stop = chrono::high_resolution_clock::now();
-    timer = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
-    cout << "\n\tTime Elapsed = " << timer << " ms\n\n";
-    // print(C);
+    stop = Time::now();
+    fsec timer2 = stop - start;
+#if TEST
+    print(C);
+#endif
+    cout << timer1.count() * 1000 << ", " << timer2.count() * 1000 << endl;
 }
 
 void print(float M[N][N]) {
