@@ -71,7 +71,7 @@ int main() {
 #if TEST
     print(C);
 #endif
-    cout << timer1.count() * 1000 << ", " << timer2.count() * 1000 << endl;
+    cout << timer1.count() * 1000 << " ms, " << timer2.count() * 1000 << " ms" << endl;
 }
 
 void print(float M[N][N]) {
