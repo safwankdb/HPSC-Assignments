@@ -33,14 +33,11 @@ int main(int argc, char **argv) {
     int myProc;
     int rows;
     int starting_row;
-
     MPI_Status status;
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
     MPI_Comm_rank(MPI_COMM_WORLD, &myProc);
-
     start = MPI_Wtime();
-
     static float A[N][N], B[N][N], C[N][N] = {{0}};
     if (myProc == MASTER) {
         for (i = 0; i < N; i++)
@@ -58,7 +55,6 @@ int main(int argc, char **argv) {
             for (i = 0; i < numProcs; i++) numRows[i] = block;
             numRows[numProcs - 1] += N % numProcs;
         }
-
         for (p = 1; p < numProcs; p++) {
             rows = numRows[p];
             MPI_Send(&rows, 1, MPI_INT, p, DOWN, MPI_COMM_WORLD);
@@ -66,11 +62,9 @@ int main(int argc, char **argv) {
                      MPI_COMM_WORLD);
             MPI_Send(&B, N * N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
         }
-
         for (i = 0; i < numRows[0]; i++)
             for (k = 0; k < N; k++)
                 for (j = 0; j < N; j++) C[i][j] = C[i][j] + A[i][k] * B[k][j];
-
         for (p = 1; p < numProcs; p++) {
             rows = numRows[p];
             MPI_Recv(&C[p * block][0], rows * N, MPI_FLOAT, p, UP,
@@ -113,7 +107,6 @@ int main(int argc, char **argv) {
                     numRows[numProcs - 1] += N % numProcs;
                 }
             }
-
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
                 starting_row = p * block;
@@ -125,7 +118,6 @@ int main(int argc, char **argv) {
                     rowsToCollect[p] = 0;
                 }
             }
-
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
                 toCollect = rowsToCollect[p];
@@ -133,14 +125,12 @@ int main(int argc, char **argv) {
                 if (toCollect > 0)
                     MPI_Send(&C[i][0], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
             }
-
             for (j = i + 1; j < numRows[0]; j++) {
                 r = C[j][i] / C[i][i];
                 for (k = i; k < N; k++) C[j][k] -= r * C[i][k];
             }
             pivotBlock = (i + 1) / numRows[0];
             if (pivotBlock == numProcs) pivotBlock--;
-
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
                 toCollect = rowsToCollect[p];
