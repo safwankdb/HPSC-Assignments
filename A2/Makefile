@@ -1,11 +1,11 @@
 all: omp-exp mpi-exp
 omp-exp: omp-100 omp-400 omp-1000 omp-4000 omp-10000
 mpi-exp1: mpi-100 mpi-400 mpi-1000 mpi-4000 mpi-10000
-mpi-exp2: mpi-2 mpi-4 mpi-6 mpi-8
+mpi-exp2: mpi-1 mpi-2 mpi-4 mpi-6 mpi-8
 
 test:
-	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=4 -D TEST=1 -o omp_out && ./omp_out
-	@mpic++ matrix_ops_mpi.cpp -O3 -D N=4 -D TEST=1 -o mpi_out && mpirun --use-hwthread-cpus -np 2 mpi_out
+	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=6 -D TEST=1 -o omp_out && ./omp_out
+	@mpic++ matrix_ops_mpi.cpp -O3 -D N=6 -D TEST=1 -o mpi_out && mpirun --use-hwthread-cpus -v -np 8 mpi_out
 
 omp-100:
 	@echo "Running for N = 100";
@@ -47,6 +47,10 @@ mpi-4000:
 mpi-10000:
 	@echo "Running for N = 10000";
 	@mpic++ matrix_ops_mpi.cpp -O3 -D N=10000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
+
+mpi-1:
+	@echo "Running for 1 Process";
+	@mpic++ matrix_ops_mpi.cpp -O3 -o mpi_out && mpirun --use-hwthread-cpus -np 1 mpi_out
 
 mpi-2:
 	@echo "Running for 2 Processes";
