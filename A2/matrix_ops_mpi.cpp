@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
     int numProcs;
     int myProc;
     int rows;
+    int starting_row;
 
     MPI_Status status;
     MPI_Init(&argc, &argv);
@@ -47,6 +48,7 @@ int main(int argc, char **argv) {
                 A[i][j] = randomFloat();
                 B[i][j] = randomFloat();
             }
+        starting_row = 0;
         int p, block = N / numProcs;
         int numRows[numProcs] = {0};
         if (numProcs > N) {
@@ -96,50 +98,77 @@ int main(int argc, char **argv) {
     float r, R[N];
     int M, p, block;
     int numRows[numProcs];
+    int rowsToCollect[numProcs];
+    int toCollect, pivotBlock;
+    bool hasPivotRow;
     for (i = 0; i < N - 1; i++) {
         if (myProc == MASTER) {
-            M = N - i - 1;
-            block = M / numProcs;
-            if (numProcs > M) {
-                block = 1;
-                for (int l = 0; l < numProcs; l++) numRows[l] = l < M;
-            } else {
-                for (int l = 0; l < numProcs; l++) numRows[l] = block;
-                numRows[numProcs - 1] += M % numProcs;
+            if (i == 0) {
+                block = N / numProcs;
+                if (numProcs > N) {
+                    block = 1;
+                    for (int l = 0; l < numProcs; l++) numRows[l] = l < N;
+                } else {
+                    for (int l = 0; l < numProcs; l++) numRows[l] = block;
+                    numRows[numProcs - 1] += N % numProcs;
+                }
             }
 
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
-                MPI_Send(&rows, 1, MPI_INT, p, DOWN, MPI_COMM_WORLD);
-                if (rows == 0) continue;
-                MPI_Send(&C[i], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
-                MPI_Send(&C[i + 1 + p * block][0], rows * N, MPI_FLOAT, p, DOWN,
-                         MPI_COMM_WORLD);
-            }
-
-            for (j = 0; j < numRows[0]; j++) {
-                r = C[i + 1 + j][i] / C[i][i];
-                for (k = i; k < N; k++) C[j + i + 1][k] -= r * C[i][k];
+                starting_row = p * block;
+                if (i < starting_row) {
+                    rowsToCollect[p] = rows;
+                } else if (starting_row + rows - 1 > i) {
+                    rowsToCollect[p] = starting_row + rows - i - 1;
+                } else {
+                    rowsToCollect[p] = 0;
+                }
             }
 
             for (p = 1; p < numProcs; p++) {
                 rows = numRows[p];
-                if (rows == 0) continue;
-                MPI_Recv(&C[i + 1 + p * block][0], rows * N, MPI_FLOAT, p, UP,
-                         MPI_COMM_WORLD, &status);
+                toCollect = rowsToCollect[p];
+                MPI_Send(&toCollect, 1, MPI_INT, p, DOWN, MPI_COMM_WORLD);
+                MPI_Send(&C[i][0], N, MPI_FLOAT, p, DOWN, MPI_COMM_WORLD);
             }
+
+            for (j = i + 1; j < numRows[0]; j++) {
+                r = C[j][i] / C[i][i];
+                for (k = i; k < N; k++) C[j][k] -= r * C[i][k];
+            }
+            pivotBlock = (i + 1) / numRows[0];
+            if (pivotBlock == numProcs) pivotBlock--;
+
+            for (p = 1; p < numProcs; p++) {
+                rows = numRows[p];
+                toCollect = rowsToCollect[p];
+                if (p != pivotBlock) {
+                    hasPivotRow = false;
+                    MPI_Send(&hasPivotRow, 1, MPI_C_BOOL, p, DOWN,
+                             MPI_COMM_WORLD);
+                } else {
+                    hasPivotRow = true;
+                    MPI_Send(&hasPivotRow, 1, MPI_C_BOOL, p, DOWN,
+                             MPI_COMM_WORLD);
+                    MPI_Recv(&C[i + 1], N, MPI_FLOAT, p, UP, MPI_COMM_WORLD,
+                             &status);
+                }
+            }
+
         } else {
-            MPI_Recv(&rows, 1, MPI_INT, MASTER, DOWN, MPI_COMM_WORLD, &status);
-            if (rows == 0) break;
-
-            MPI_Recv(&R, N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD, &status);
-            MPI_Recv(&C, rows * N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD,
+            MPI_Recv(&toCollect, 1, MPI_INT, MASTER, DOWN, MPI_COMM_WORLD,
                      &status);
-            for (j = 0; j < rows; j++) {
+            MPI_Recv(&R, N, MPI_FLOAT, MASTER, DOWN, MPI_COMM_WORLD, &status);
+            for (j = rows - toCollect; j < rows; j++) {
                 r = C[j][i] / R[i];
                 for (k = i; k < N; k++) C[j][k] -= r * R[k];
             }
-            MPI_Send(&C, rows * N, MPI_FLOAT, MASTER, UP, MPI_COMM_WORLD);
+            MPI_Recv(&hasPivotRow, 1, MPI_C_BOOL, MASTER, DOWN, MPI_COMM_WORLD,
+                     &status);
+            if (hasPivotRow)
+                MPI_Send(&C[rows - toCollect], N, MPI_FLOAT, MASTER, UP,
+                         MPI_COMM_WORLD);
         }
     }
     if (myProc == MASTER) {
@@ -148,7 +177,7 @@ int main(int argc, char **argv) {
 #endif
         end = MPI_Wtime();
         timer2 = (end - start) * 1000;
-        cout << timer1 << ", " << timer2 << endl;
+        cout << timer1 << " ms, " << timer2 << " ms" << endl;
     }
     MPI_Finalize();
     return 0;
