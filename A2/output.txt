@@ -1,0 +1,24 @@
+OMP Running for N = 100
+0.510134 ms, 0.256411 ms
+OMP Running for N = 400
+5.33012 ms, 2.155 ms
+OMP Running for N = 1000
+59.2783 ms, 25.6242 ms
+OMP Running for N = 2000
+447.81 ms, 193.22 ms
+OMP Running for N = 5000
+9611.14 ms, 5739.26 ms
+OMP Running for N = 10000
+82744.4 ms, 55828.1 ms
+MPI Running for N = 100
+15.5579 ms, 0.909252 ms
+MPI Running for N = 400
+27.7324 ms, 4.01449 ms
+MPI Running for N = 1000
+155.84 ms, 40.1123 ms
+MPI Running for N = 2000
+1133.79 ms, 268.133 ms
+MPI Running for N = 5000
+15877.7 ms, 7206.91 ms
+MPI Running for N = 10000
+119891 ms, 68897.8 ms
