@@ -8,23 +8,23 @@ test:
 	@mpic++ matrix_ops_mpi.cpp -O3 -D N=6 -D TEST=1 -o mpi_out && mpirun --use-hwthread-cpus -v -np 8 mpi_out
 
 omp-100:
-	@echo "Running for N = 100";
+	@echo "OMP Running for N = 100";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=100 -o omp_out && ./omp_out
 
 omp-400:
-	@echo "Running for N = 400";
+	@echo "OMP Running for N = 400";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=400 -o omp_out && ./omp_out
 
 omp-1000:
-	@echo "Running for N = 1000";
+	@echo "OMP Running for N = 1000";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=1000 -o omp_out && ./omp_out
 
 omp-2000:
-	@echo "Running for N = 2000";
+	@echo "OMP Running for N = 2000";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=2000 -o omp_out && ./omp_out
 
 omp-5000:
-	@echo "Running for N = 5000";
+	@echo "OMP Running for N = 5000";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=5000 -o omp_out && ./omp_out
 
 omp-10000:
