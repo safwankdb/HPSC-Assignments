@@ -99,4 +99,58 @@
 
 ## Timing Analysis
 
-TODO
+- ### Scaling with $N$
+    <div align='center'>
+    <img src="1.png" align='center'/>
+    </div>
+
+    As we can see, MPI is a little slower than OpenMP but scales very similarly with $N$. The largest problem size $N=10000$ was easily completed within 100 seconds.
+
+- ### Scaling with Threads
+
+    <div align='center'>
+    <img src="2.png" align='center'/>
+    </div>
+    The plot for OMP Matrix Multiplication looks as expected, but there was a consistent jump at 5 threads while performing Gaussian Elimination. The same jump is present in both graphs for MPI as well. This may be due to the fact that after 4 physical cores, the framework uses hyperthreading for parallelization and thus there should be some overhead for that, which may be negligible for the first task.
+
+## Hardware Information
+
+- ### CPU
+        Architecture:        x86_64
+        CPU op-mode(s):      32-bit, 64-bit
+        Byte Order:          Little Endian
+        CPU(s):              8
+        On-line CPU(s) list: 0-7
+        Thread(s) per core:  2
+        Core(s) per socket:  4
+        Socket(s):           1
+        NUMA node(s):        1
+        Vendor ID:           GenuineIntel
+        CPU family:          6
+        Model:               79
+        Model name:          Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+        Stepping:            1
+        CPU MHz:             2698.391
+        CPU max MHz:         3000.0000
+        CPU min MHz:         1200.0000
+        BogoMIPS:            4600.18
+        Hypervisor vendor:   Xen
+        Virtualization type: full
+        L1d cache:           32K
+        L1i cache:           32K
+        L2 cache:            256K
+        L3 cache:            46080K
+        NUMA node0 CPU(s):   0-7
+
+- ### OS
+        NAME="Amazon Linux"
+        VERSION="2"
+        ID="amzn"
+        ID_LIKE="centos rhel fedora"
+        VERSION_ID="2"
+        PRETTY_NAME="Amazon Linux 2"
+        ANSI_COLOR="0;33"
+        CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2:-:internal"
+        HOME_URL="https://amazonlinux.com/"
+        VARIANT="internal"
+
