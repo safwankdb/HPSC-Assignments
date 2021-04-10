@@ -1,4 +1,4 @@
-all: omp-exp mpi-exp mpi-exp2 clean
+all: omp-exp mpi-exp mpi-exp2 omp-exp2 clean
 omp-exp: omp-100 omp-400 omp-800 omp-1000 omp-2000 omp-4000 omp-6000 omp-8000 omp-10000
 mpi-exp: mpi-100 mpi-400 mpi-800 mpi-1000 mpi-2000 mpi-4000 mpi-6000 mpi-8000 mpi-10000
 mpi-exp2: mpi-2 mpi-3 mpi-4 mpi-5 mpi-6 mpi-7 mpi-8
