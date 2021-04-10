@@ -20,6 +20,8 @@ MPI Running for N = 100
 1.46026 ms, 0.855569 ms
 MPI Running for N = 400
 19.6111 ms, 3.86322 ms
+MPI Running for N = 800
+88.926 ms, 20.5972 ms
 MPI Running for N = 1000
 150.973 ms, 38.532 ms
 MPI Running for N = 2000
@@ -32,19 +34,31 @@ MPI Running for N = 8000
 61460 ms, 33900.2 ms
 MPI Running for N = 10000
 118303 ms, 68759 ms
-Running for 1 Process
-4630.31 ms, 1367.7 ms
-Running for 2 Processes
+MPI Running for 2 Processes
 5128.04 ms, 1629.08 ms
-Running for 3 Processes
+MPI Running for 3 Processes
 2377.49 ms, 690.959 ms
-Running for 4 Processes
+MPI Running for 4 Processes
 1956.29 ms, 576.844 ms
-Running for 5 Processes
+MPI Running for 5 Processes
 2428.63 ms, 767.9 ms
-Running for 6 Processes
+MPI Running for 6 Processes
 2456.3 ms, 724.471 ms
-Running for 7 Processes
+MPI Running for 7 Processes
 2432.19 ms, 544.542 ms
-Running for 8 Processes
+MPI Running for 8 Processes
 2202.16 ms, 542.135 ms
+OMP Running for 2 Processes
+2600.67 ms, 756.446 ms
+OMP Running for 3 Processes
+1984.54 ms, 511.901 ms
+OMP Running for 4 Processes
+1514.46 ms, 381.822 ms
+OMP Running for 5 Processes
+1366.44 ms, 533.066 ms
+OMP Running for 6 Processes
+1140.03 ms, 446.055 ms
+OMP Running for 7 Processes
+1052.11 ms, 416.177 ms
+OMP Running for 8 Processes
+972.166 ms, 412.873 ms
