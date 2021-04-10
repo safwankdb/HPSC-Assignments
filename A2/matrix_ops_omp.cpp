@@ -13,6 +13,10 @@
 #define TEST 0
 #endif
 
+#ifndef THREADS
+#define THREADS 8
+#endif
+
 using namespace std;
 
 void print(float M[N][N]);
@@ -25,7 +29,7 @@ float randomFloat() {
 
 void multiply(float A[N][N], float B[N][N], float C[N][N]) {
     int i, j, k;
-#pragma omp parallel for private(j, k)
+#pragma omp parallel for private(j, k) num_threads(THREADS)
     for (i = 0; i < N; i++)
         for (k = 0; k < N; k++)
             for (j = 0; j < N; j++) C[i][j] += A[i][k] * B[k][j];
@@ -35,7 +39,7 @@ void gaussianElimination(float R[N][N]) {
     float r;
     int i, j, k;
     for (i = 0; i < N; i++) {
-#pragma omp parallel for private(r, k)
+#pragma omp parallel for private(r, k) num_threads(THREADS)
         for (j = i + 1; j < N; j++) {
             r = R[j][i] / R[i][i];
             for (k = i; k < N; k++) R[j][k] -= r * R[i][k];
