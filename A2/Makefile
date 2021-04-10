@@ -1,6 +1,6 @@
-all: omp-exp mpi-exp clean
-omp-exp: omp-100 omp-400 omp-1000 omp-2000 omp-5000 omp-10000
-mpi-exp: mpi-100 mpi-400 mpi-1000 mpi-2000 mpi-5000 mpi-10000
+all: omp-exp mpi-exp mpi-exp2 clean
+omp-exp: omp-100 omp-400 omp-800 omp-1000 omp-2000 omp-4000 omp-6000 omp-8000 omp-10000
+mpi-exp: mpi-100 mpi-400 omp-800 mpi-1000 mpi-2000 mpi-4000 mpi-6000 mpi-8000 mpi-10000
 mpi-exp2: mpi-1 mpi-2 mpi-3 mpi-4 mpi-5 mpi-6 mpi-7 mpi-8
 
 test:
@@ -15,6 +15,10 @@ omp-400:
 	@echo "OMP Running for N = 400";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=400 -o omp_out && ./omp_out
 
+omp-800:
+	@echo "OMP Running for N = 800";
+	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=800 -o omp_out && ./omp_out
+
 omp-1000:
 	@echo "OMP Running for N = 1000";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=1000 -o omp_out && ./omp_out
@@ -23,9 +27,17 @@ omp-2000:
 	@echo "OMP Running for N = 2000";
 	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=2000 -o omp_out && ./omp_out
 
-omp-5000:
-	@echo "OMP Running for N = 5000";
-	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=5000 -o omp_out && ./omp_out
+omp-4000:
+	@echo "OMP Running for N = 4000";
+	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=4000 -o omp_out && ./omp_out
+
+omp-6000:
+	@echo "OMP Running for N = 6000";
+	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=6000 -o omp_out && ./omp_out
+
+omp-8000:
+	@echo "OMP Running for N = 8000";
+	@g++ -O3 -fopenmp matrix_ops_omp.cpp -D N=8000 -o omp_out && ./omp_out
 
 omp-10000:
 	@echo "OMP Running for N = 10000";
@@ -40,6 +52,10 @@ mpi-400:
 	@echo "MPI Running for N = 400";
 	@mpic++ matrix_ops_mpi.cpp -O3 -D N=400 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
 
+mpi-800:
+	@echo "MPI Running for N = 800";
+	@mpic++ matrix_ops_mpi.cpp -O3 -D N=800 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
+
 mpi-1000:
 	@echo "MPI Running for N = 1000";
 	@mpic++ matrix_ops_mpi.cpp -O3 -D N=1000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
@@ -48,9 +64,17 @@ mpi-2000:
 	@echo "MPI Running for N = 2000";
 	@mpic++ matrix_ops_mpi.cpp -O3 -D N=2000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
 
-mpi-5000:
-	@echo "MPI Running for N = 5000";
-	@mpic++ matrix_ops_mpi.cpp -O3 -D N=5000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
+mpi-4000:
+	@echo "MPI Running for N = 4000";
+	@mpic++ matrix_ops_mpi.cpp -O3 -D N=4000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
+
+mpi-6000:
+	@echo "MPI Running for N = 6000";
+	@mpic++ matrix_ops_mpi.cpp -O3 -D N=6000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
+
+mpi-8000:
+	@echo "MPI Running for N = 8000";
+	@mpic++ matrix_ops_mpi.cpp -O3 -D N=8000 -o mpi_out && mpirun --use-hwthread-cpus -np 8 mpi_out
 
 mpi-10000:
 	@echo "MPI Running for N = 10000";
