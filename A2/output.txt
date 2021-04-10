@@ -1,24 +1,50 @@
 OMP Running for N = 100
-0.510134 ms, 0.256411 ms
+0.533628 ms, 0.252869 ms
 OMP Running for N = 400
-5.33012 ms, 2.155 ms
+5.23532 ms, 2.13004 ms
+OMP Running for N = 800
+31.9233 ms, 13.532 ms
 OMP Running for N = 1000
-59.2783 ms, 25.6242 ms
+59.5545 ms, 25.9717 ms
 OMP Running for N = 2000
-447.81 ms, 193.22 ms
-OMP Running for N = 5000
-9611.14 ms, 5739.26 ms
+448.106 ms, 190.532 ms
+OMP Running for N = 4000
+4882.86 ms, 2206.83 ms
+OMP Running for N = 6000
+16196.5 ms, 11165.8 ms
+OMP Running for N = 8000
+39804.4 ms, 27096 ms
 OMP Running for N = 10000
-82744.4 ms, 55828.1 ms
+89459.2 ms, 54503.1 ms
 MPI Running for N = 100
-15.5579 ms, 0.909252 ms
+1.46026 ms, 0.855569 ms
 MPI Running for N = 400
-27.7324 ms, 4.01449 ms
+19.6111 ms, 3.86322 ms
 MPI Running for N = 1000
-155.84 ms, 40.1123 ms
+150.973 ms, 38.532 ms
 MPI Running for N = 2000
-1133.79 ms, 268.133 ms
-MPI Running for N = 5000
-15877.7 ms, 7206.91 ms
+1113.58 ms, 280.434 ms
+MPI Running for N = 4000
+8532.17 ms, 3213.92 ms
+MPI Running for N = 6000
+27164.6 ms, 13293.9 ms
+MPI Running for N = 8000
+61460 ms, 33900.2 ms
 MPI Running for N = 10000
-119891 ms, 68897.8 ms
+118303 ms, 68759 ms
+Running for 1 Process
+4630.31 ms, 1367.7 ms
+Running for 2 Processes
+5128.04 ms, 1629.08 ms
+Running for 3 Processes
+2377.49 ms, 690.959 ms
+Running for 4 Processes
+1956.29 ms, 576.844 ms
+Running for 5 Processes
+2428.63 ms, 767.9 ms
+Running for 6 Processes
+2456.3 ms, 724.471 ms
+Running for 7 Processes
+2432.19 ms, 544.542 ms
+Running for 8 Processes
+2202.16 ms, 542.135 ms
