@@ -13,7 +13,7 @@
 #define TEST 0
 #endif
 
-#define TPB 256
+#define TPB 1024
 
 using namespace std;
 
@@ -65,6 +65,7 @@ int main() {
 #if TEST
     print(C);
 #endif
+    // cout << C[N*N-1] << endl;
     cout << timer1.count() * 1000 << " ms" << endl;
 }
 
