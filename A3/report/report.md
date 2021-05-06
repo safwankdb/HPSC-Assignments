@@ -1,6 +1,6 @@
 <center>
 
-<h1> ME766: Assignment 2
+<h1> ME766: Assignment 3
 
 <h3>Mohd Safwan
 
