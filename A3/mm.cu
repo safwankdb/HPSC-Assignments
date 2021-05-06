@@ -13,7 +13,9 @@
 #define TEST 0
 #endif
 
+#ifndef TPB
 #define TPB 1024
+#endif
 
 using namespace std;
 
