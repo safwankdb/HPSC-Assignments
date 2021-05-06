@@ -1,0 +1,40 @@
+CUDA Running for N = 100
+0.114216 ms
+CUDA Running for N = 400
+1.76845 ms
+CUDA Running for N = 800
+14.2307 ms
+CUDA Running for N = 1000
+27.2424 ms
+CUDA Running for N = 2000
+200.839 ms
+CUDA Running for N = 4000
+2501.41 ms
+CUDA Running for N = 6000
+8184.45 ms
+CUDA Running for N = 8000
+18801.4 ms
+CUDA Running for N = 10000
+36737.4 ms
+CUDA Running for 1 threads per block
+18206.5 ms
+CUDA Running for 2 threads per block
+9055.92 ms
+CUDA Running for 4 threads per block
+4747.2 ms
+CUDA Running for 8 threads per block
+2621.06 ms
+CUDA Running for 16 threads per block
+1388.54 ms
+CUDA Running for 32 threads per block
+761.165 ms
+CUDA Running for 64 threads per block
+599.343 ms
+CUDA Running for 128 threads per block
+651.171 ms
+CUDA Running for 256 threads per block
+702.382 ms
+CUDA Running for 512 threads per block
+591.336 ms
+CUDA Running for 1024 threads per block
+369.659 ms

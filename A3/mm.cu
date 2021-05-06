@@ -19,8 +19,6 @@
 
 using namespace std;
 
-void print(float* M);
-
 float randomFloat() {
     static mt19937 generator(42);
     static uniform_real_distribution<double> dist(-2, 2);
@@ -65,20 +63,7 @@ int main() {
     auto stop = Time::now();
     fsec timer1 = stop - start;
 #if TEST
-    print(C);
+    cout << C[N*N-1] << endl;
 #endif
-    // cout << C[N*N-1] << endl;
     cout << timer1.count() * 1000 << " ms" << endl;
-}
-
-void print(float* M) {
-    cout << endl;
-    cout.setf(ios::fixed);
-    for (int i = 0; i < N; i++) {
-        cout << '\t';
-        for (int j = 0; j < N; j++)
-            cout << setw(10) << setprecision(2) << M[i * N + j] << " ";
-        cout << endl;
-    }
-    cout << endl;
 }
