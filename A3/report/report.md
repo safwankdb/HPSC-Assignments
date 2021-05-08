@@ -37,6 +37,8 @@ __global__ void multiply(float* A, float* B, float* C) {
 
 ## Timing Analysis
 
+To be most fair in comparison, I have left out the time taken in initialising and allocating memory for $A,B,C$. The time raken in copying data between host and device and the matrix multiplication itself in only considered here
+
 - ### Scaling with $N$
     <div align='center'>
     <img src="1.png" align="center"/>
